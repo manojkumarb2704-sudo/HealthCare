@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Healthcare Website</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f8fafc;
+      color: #1e293b;
+    }
+    header {
+      background: #0ea5e9;
+      padding: 20px;
+      text-align: center;
+      color: white;
+    }
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      background: #0284c7;
+      padding: 10px;
+    }
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .hero {
+      text-align: center;
+      padding: 60px 20px;
+      background: linear-gradient(to right, #0ea5e9, #38bdf8);
+      color: white;
+    }
+    .hero h1 {
+      font-size: 2.5rem;
+    }
+    .services {
+      padding: 40px 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      max-width: 1000px;
+      margin: auto;
+    }
+    .card {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      padding: 20px;
+      text-align: center;
+    }
+    .card h3 {
+      color: #0ea5e9;
+    }
+    footer {
+      background: #0ea5e9;
+      text-align: center;
+      padding: 20px;
+      color: white;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>HealthCare+</h1>
+    <p>Your Trusted Healthcare Partner</p>
+  </header>
+
+  <nav>
+    <a href="#">Home</a>
+    <a href="#">Services</a>
+    <a href="#">Doctors</a>
+    <a href="#">Contact</a>
+  </nav>
+
+  <section class="hero">
+    <h1>Quality Healthcare for Everyone</h1>
+    <p>Book appointments, consult doctors online, and get the best healthcare services from the comfort of your home.</p>
+  </section>
+
+  <section class="services">
+    <div class="card">
+      <h3>👨‍⚕️ Find a Doctor</h3>
+      <p>Search and connect with top doctors in various specialties.</p>
+    </div>
+    <div class="card">
+      <h3>💊 Pharmacy</h3>
+      <p>Order medicines online with doorstep delivery.</p>
+    </div>
+    <div class="card">
+      <h3>🧪 Lab Tests</h3>
+      <p>Book lab tests and get results delivered online securely.</p>
+    </div>
+    <div class="card">
+      <h3>📅 Appointments</h3>
+      <p>Schedule clinic or online consultations easily.</p>
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2025 HealthCare+. All Rights Reserved.</p>
+  </footer>
+</body>
+</html>
