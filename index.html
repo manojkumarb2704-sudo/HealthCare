@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PulseVibe - NextGen Healthcare Portal</title>
+    <!-- Google Fonts & FontAwesome Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #00d2c4;
+            --primary-dark: #00a89d;
+            --secondary: #4f46e5;
+            --dark: #0f172a;
+            --light: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #334155;
+            --text-muted: #64748b;
+            --glass: rgba(255, 255, 255, 0.7);
+            --shadow: 0 20px 40px -15px rgba(15, 23, 42, 0.08);
+            --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Smooth Light/Dark alternative variable base if wanted later */
+        [data-theme="dark"] {
+            --light: #0b0f19;
+            --dark: #f8fafc;
+            --card-bg: #111827;
+            --text-main: #e2e8f0;
+            --text-muted: #94a3b8;
+            --glass: rgba(17, 24, 39, 0.7);
+            --shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        body {
+            background-color: var(--light);
+            color: var(--text-main);
+            overflow-x: hidden;
+            transition: var(--transition);
+        }
+
+        /* --- BACKGROUND GLOW ANIMATIONS --- */
+        .glow-bg {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(0,210,196,0.15) 0%, rgba(79,70,229,0.05) 70%, transparent 100%);
+            top: -100px;
+            right: -100px;
+            z-index: -1;
+            filter: blur(50px);
+            animation: pulseGlow 8s infinite alternate;
+        }
+
+        @keyframes pulseGlow {
+            0% { transform: scale(1) translate(0, 0); }
+            100% { transform: scale(1.1) translate(-50px, 30px); }
+        }
+
+        /* --- NAVBAR --- */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 8%;
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.02);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo i {
+            color: var(--primary);
+            animation: heartbeat 1.5s infinite ease-in-out;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            20% { transform: scale(1.15); }
+            40% { transform: scale(1.05); }
+            60% { transform: scale(1.15); }
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-muted);
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--primary);
+        }
+
+        .cta-btn {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 12px 28px;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(0, 210, 196, 0.2);
+            transition: var(--transition);
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 25px rgba(0, 210, 196, 0.35);
+        }
+
+        /* --- HERO SECTION & LIVE METRICS --- */
+        .container {
+            max-width: 1400px;
+            margin: 120px auto 0;
+            padding: 40px 8%;
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .hero-text h1 {
+            font-size: 52px;
+            line-height: 1.15;
+            color: var(--dark);
+            margin-bottom: 24px;
+        }
+
+        .hero-text h1 span {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-text p {
+            color: var(--text-muted);
+            font-size: 18px;
+            line-height: 1.6;
+            margin-bottom: 32px;
+        }
+
+        /* --- VIRTUAL MONITOR WIDGET (ATTENTION GRABBER) --- */
+        .interactive-monitor {
+            background: var(--card-bg);
+            border-radius: 24px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(255,255,255,0.2);
+            position: relative;
+            transition: var(--transition);
+        }
+
+        .interactive-monitor:hover {
+            transform: translateY(-5px);
+        }
+
+        .monitor-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .badge {
+            background: rgba(0, 210, 196, 0.1);
+            color: var(--primary-dark);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .badge::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background-color: var(--primary);
+            border-radius: 50%;
+            display: inline-block;
+            animation: flash 1s infinite alternate;
+        }
+
+        @keyframes flash {
+            0% { opacity: 0.3; }
+            100% { opacity: 1; }
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .metric-card {
+            background: var(--light);
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: var(--transition);
+        }
+
+        .metric-card:hover, .metric-card.active {
+            border-color: var(--primary);
+            background: var(--card-bg);
+            transform: scale(1.03);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.02);
+        }
+
+        .metric-card i {
+            font-size: 24px;
+            margin-bottom: 12px;
+        }
+
+        .metric-card.bpm i { color: #ef4444; }
+        .metric-card.sleep i { color: #3b82f6; }
+        .metric-card.steps i { color: #10b981; }
+        .metric-card.water i { color: #06b6d4; }
+
+        .metric-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 4px;
+        }
+
+        .metric-label {
+            font-size: 13px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        /* --- VISUAL INTERACTIVE SIMULATOR (DIAL) --- */
+        .simulator-display {
+            margin-top: 30px;
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            border-radius: 16px;
+            padding: 24px;
+            color: white;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .wave-canvas-container {
+            height: 80px;
+            margin: 15px 0;
+            position: relative;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .slider-label {
+            font-size: 12px;
+            color: #94a3b8;
+        }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            width: 140px;
+            height: 6px;
+            background: #334155;
+            border-radius: 5px;
+            outline: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+        }
+
+        /* Theme Toggle styles */
+        .theme-switch {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 20px;
+            cursor: pointer;
+            padding: 8px;
+            transition: var(--transition);
+        }
+
+        .theme-switch:hover {
+            color: var(--primary);
+        }
+
+        @media (max-width: 968px) {
+            .container {
+                grid-template-columns: 1fr;
+                margin-top: 80px;
+                text-align: center;
+            }
+            .nav-links { display: none; }
+            .hero-text h1 { font-size: 38px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="glow-bg"></div>
+
+    <!-- NAVIGATION HEADER -->
+    <nav>
+        <div class="logo">
+            <i class="fa-solid fa-heart-pulse"></i>
+            <span>PulseVibe</span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="#" class="active">Dashboard</a></li>
+            <li><a href="#">Specialists</a></li>
+            <li><a href="#">Analytics</a></li>
+            <li><a href="#">Telehealth</a></li>
+        </ul>
+        <div style="display: flex; align-items: center; gap: 15px;">
+            <button class="theme-switch" id="themeBtn" title="Toggle Theme">
+                <i class="fa-solid fa-moon"></i>
+            </button>
+            <button class="cta-btn">Launch Portal</button>
+        </div>
+    </nav>
+
+    <!-- HERO / INTERACTIVE PLAYGROUND CONTAINER -->
+    <div class="container">
+        <div class="hero-text">
+            <div class="badge" style="width: fit-content; margin-bottom: 20px;">AI-Powered Health Tracking Ecosystem</div>
+            <h1>Smart Healthcare That <span>Syncs With Your Life</span>.</h1>
+            <p>Experience an immersive, interactive medical hub engineered to track vitals, connect instantly with global specialists, and optimize your physiological trajectory in real-time.</p>
+            <div style="display: flex; gap: 16px; justify-content: inherit;">
+                <button class="cta-btn" style="background: var(--dark); color: var(--light); box-shadow: none;">Explore Vitals</button>
+                <button class="cta-btn">Book Appointment <i class="fa-solid fa-arrow-right" style="margin-left: 8px;"></i></button>
+            </div>
+        </div>
+
+        <!-- RIGHT SIDE: THE INTERACTIVE ATTENTION DEVICE -->
+        <div class="interactive-monitor">
+            <div class="monitor-header">
+                <h3>Live Diagnostics Simulator</h3>
+                <span class="badge">Vitals Active</span>
+            </div>
+
+            <!-- Intersecting stat grid cards -->
+            <div class="metrics-grid">
+                <div class="metric-card bpm active" onclick="selectMetric('heart', this)">
+                    <i class="fa-solid fa-heartbeat"></i>
+                    <div class="metric-value" id="heartValue">72</div>
+                    <div class="metric-label">Heart Rate (BPM)</div>
+                </div>
+                <div class="metric-card sleep" onclick="selectMetric('sleep', this)">
+                    <i class="fa-solid fa-moon"></i>
+                    <div class="metric-value">7.4</div>
+                    <div class="metric-label">Sleep Cycle (Hrs)</div>
+                </div>
+                <div class="metric-card steps" onclick="selectMetric('steps', this)">
+                    <i class="fa-solid fa-shoe-prints"></i>
+                    <div class="metric-value" id="stepValue">8,432</div>
+                    <div class="metric-label">Daily Steps</div>
+                </div>
+                <div class="metric-card water" onclick="selectMetric('water', this)">
+                    <i class="fa-solid fa-droplet"></i>
+                    <div class="metric-value">1.8</div>
+                    <div class="metric-label">Hydration (Liters)</div>
+                </div>
+            </div>
+
+            <!-- The Realtime Oscilloscope display module -->
+            <div class="simulator-display">
+                <div style="display: flex; justify-content: space-between; font-size: 12px; opacity: 0.8;">
+                    <span id="displayLabel"><i class="fa-solid fa-heartbeat"></i> Live ECG Stream</span>
+                    <span id="displayStatus" style="color: var(--primary);">60 Hz Stable</span>
+                </div>
+                
+                <div class="wave-canvas-container">
+                    <canvas id="waveCanvas" style="width: 100%; height: 100%;"></canvas>
+                </div>
+
+                <div class="controls">
+                    <span class="slider-label">Adjust Simulation Intensity:</span>
+                    <input type="range" id="intensitySlider" min="40" max="140" value="72">
+                    <span id="sliderVal" style="font-size: 13px; font-weight: 600; width: 30px;">72</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT: LOGIC, INTERACTION & ANIMATION CANVAS -->
+    <script>
+        // Real-Time Canvas Oscilloscope Engine
+        const canvas = document.getElementById('waveCanvas');
+        const ctx = canvas.getContext('2d');
+        const slider = document.getElementById('intensitySlider');
+        const sliderVal = document.getElementById('sliderVal');
+        const heartValue = document.getElementById('heartValue');
+        const displayLabel = document.getElementById('displayLabel');
+        const stepValue = document.getElementById('stepValue');
+
+        let currentMetric = 'heart';
+        let animationFrameId;
+        let xIdx = 0;
+
+        // Set high density display backing for clarity
+        function resizeCanvas() {
+            canvas.width = canvas.parentElement.clientWidth * window.devicePixelRatio;
+            canvas.height = canvas.parentElement.clientHeight * window.devicePixelRatio;
+            ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        let stepCount = 8432;
+        setInterval(() => {
+            stepCount += Math.floor(Math.random() * 3);
+            stepValue.innerText = stepCount.toLocaleString();
+        }, 3000);
+
+        // Core visual oscillator rendering routine
+        function draw() {
+            const w = canvas.width / window.devicePixelRatio;
+            const h = canvas.height / window.devicePixelRatio;
+            
+            // Subtle feedback echo fade
+            ctx.fillStyle = 'rgba(15, 23, 42, 0.12)';
+            ctx.fillRect(0, 0, w, h);
+
+            ctx.strokeStyle = currentMetric === 'heart' ? '#ef4444' : 
+                              currentMetric === 'sleep' ? '#3b82f6' : 
+                              currentMetric === 'steps' ? '#10b981' : '#06b6d4';
+            ctx.lineWidth = 3;
+            ctx.lineCap = 'round';
+            ctx.shadowBlur = 8;
+            ctx.shadowColor = ctx.strokeStyle;
+
+            ctx.beginPath();
+            
+            let speedFactor = parseInt(slider.value);
+
+            for (let i = 0; i < w; i += 2) {
+                let y = h / 2;
+                
+                if (currentMetric === 'heart') {
+                    // Generates complex physiological pulse rhythm architectures
+                    let period = (xIdx + i) * (speedFactor * 0.0005);
+                    let cycle = period % Math.PI;
+                    if (cycle < 0.2) {
+                        y -= Math.sin(cycle * (Math.PI / 0.2)) * (h * 0.4); 
+                    } else if (cycle > 0.2 && cycle < 0.35) {
+                        y += Math.sin((cycle - 0.2) * (Math.PI / 0.15)) * (h * 0.15);
+                    }
+                } else if (currentMetric === 'sleep') {
+                    // Sine curves depicting calm delta waves
+                    y += Math.sin((xIdx + i) * 0.02) * Math.cos((xIdx + i) * 0.005) * (h * 0.35);
+                } else if (currentMetric === 'steps') {
+                    // Angular bursts representing dynamic walking impacts
+                    y += (Math.sin((xIdx + i) * (speedFactor * 0.0002)) > 0.7) ? -20 : 5;
+                } else {
+                    // Fluid, varying frequency liquid wave profiles
+                    y += Math.sin((xIdx + i) * 0.04) * 12 + Math.sin((xIdx + i) * 0.01) * 8;
+                }
+
+                if (i === 0) ctx.moveTo(i, y);
+                else ctx.lineTo(i, y);
+            }
+            ctx.stroke();
+
+            // Clear absolute shadow leaks
+            ctx.shadowBlur = 0;
+
+            xIdx += (speedFactor * 0.05);
+            animationFrameId = requestAnimationFrame(draw);
+        }
+
+        // Live slider modifier linkage
+        slider.addEventListener('input', (e) => {
+            const val = e.target.value;
+            sliderVal.innerText = val;
+            if(currentMetric === 'heart') {
+                heartValue.innerText = val;
+            }
+        });
+
+        // Toggle focus context metrics states
+        function selectMetric(type, element) {
+            document.querySelectorAll('.metric-card').forEach(c => c.classList.remove('active'));
+            element.classList.add('active');
+            currentMetric = type;
+
+            if(type === 'heart') {
+                displayLabel.innerHTML = `<i class="fa-solid fa-heartbeat"></i> Live ECG Stream`;
+                slider.min = 40; slider.max = 140; slider.value = heartValue.innerText;
+            } else if (type === 'sleep') {
+                displayLabel.innerHTML = `<i class="fa-solid fa-moon"></i> REM Cycle Analysis`;
+                slider.min = 10; slider.max = 80; slider.value = 30;
+            } else if (type === 'steps') {
+                displayLabel.innerHTML = `<i class="fa-solid fa-shoe-prints"></i> Cadence Frequency`;
+                slider.min = 20; slider.max = 150; slider.value = 85;
+            } else {
+                displayLabel.innerHTML = `<i class="fa-solid fa-droplet"></i> Fluid Absorption Ratio`;
+                slider.min = 10; slider.max = 100; slider.value = 50;
+            }
+            sliderVal.innerText = slider.value;
+        }
+
+        // Theme switching engine toggles dark mode variant variables smoothly
+        const themeBtn = document.getElementById('themeBtn');
+        themeBtn.addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            if(currentTheme === 'dark') {
+                document.documentElement.removeAttribute('data-theme');
+                themeBtn.innerHTML = `<i class="fa-solid fa-moon"></i>`;
+            } else {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                themeBtn.innerHTML = `<i class="fa-solid fa-sun"></i>`;
+            }
+        });
+
+        // Initialize execution loops
+        draw();
+    </script>
+</body>
+</html>
